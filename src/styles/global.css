@@ -1,0 +1,57 @@
+/* ── Masque le site pendant le chargement ── */
+#SITE_CONTAINER {
+  opacity: 0;
+  transition: opacity 0.4s ease-out;
+}
+#SITE_CONTAINER.site-ready {
+  opacity: 1;
+}
+
+/* ── Overlay preloader ── */
+#wix-preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 24px;
+  background: #0a0a0a; /* ta couleur de marque */
+  transition: opacity 0.4s ease-out, visibility 0.4s ease-out;
+}
+#wix-preloader.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ── Logo animé ── */
+.preloader-logo {
+  width: 64px;
+  height: 64px;
+  animation: pulse-logo 1.4s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* ── Barre de progression ── */
+.preloader-bar-track {
+  width: 180px;
+  height: 2px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.preloader-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: #fff;
+  border-radius: 2px;
+  transition: width 0.3s ease-out;
+  will-change: width;
+}
+
+@keyframes pulse-logo {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.6; transform: scale(0.94); }
+}
