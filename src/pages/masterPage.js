@@ -1,20 +1,14 @@
 import wixWindowFrontend from 'wix-window-frontend';
 
-$w.onReady(function () {
-    // On vérifie si l'utilisateur est sur mobile pour adapter l'animation si besoin
-    const formFactor = wixWindowFrontend.formFactor;
+$w.onReady(() => {
+    // Si on est en mode aperçu, on cache le loader plus vite pour pas s'embêter
+    const delay = wixWindowFrontend.viewMode === "Preview" ? 200 : 1000;
 
-    // Simulation du temps de chargement ou attente du chargement complet
-    // On utilise un timeout léger pour s'assurer que l'animation est vue
-    waitForLoading();
+    // On laisse un petit délai pour le confort visuel
+    setTimeout(() => {
+        const preloader = $w('#customPreloader1'); // Vérifie l'ID de ton élément
+        if (preloader) {
+            preloader.setAttribute('status', 'done');
+        }
+    }, delay);
 });
-
-function waitForLoading() {
-    // Optionnel : Tu peux attendre que des datasets spécifiques soient prêts ici
-    
-    // Animation de sortie (Fade out)
-    $w("#preloader").hide("fade", { "duration": 800, "delay": 200 })
-        .then(() => {
-            console.log("Portfolio chargé avec succès");
-        });
-}
