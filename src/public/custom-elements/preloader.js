@@ -20,6 +20,8 @@ template.innerHTML = `
     .loader-wrapper.fade-out {
       opacity: 0;
       visibility: hidden;
+      pointer-events: none; /* Sécurité supplémentaire */
+      transition: opacity 0.8s ease, visibility 0.8s;
     }
 
     /* Exemple de Spinner minimaliste */
@@ -63,15 +65,19 @@ class CustomPreloader extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    console.log(`Attribut changé : ${name} = ${newValue}`);
     if (name === 'status' && newValue === 'done') {
-      const container = this.shadowRoot.getElementById('container');
-      container.classList.add('fade-out');
-
-      // On retire complètement l'élément du DOM après l'animation
-      setTimeout(() => this.remove(), 800);
+        const container = this.shadowRoot.getElementById('container');
+        if (container) {
+            container.classList.add('fade-out');
+            
+            // On attend la fin de l'anim (800ms) pour supprimer l'élément du DOM
+            setTimeout(() => {
+                this.style.display = 'none'; // Cache l'hôte
+                this.remove(); // Supprime l'élément
+            }, 800);
+        }
     }
-  }
+}
 }
 
 customElements.define('custom-preloader', CustomPreloader);
