@@ -46,6 +46,15 @@ class CustomPreloader extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
+
+    // Sécurité : Si après 5 secondes le loader est toujours là, on le dégage.
+    setTimeout(() => {
+      const container = this.shadowRoot.getElementById('container');
+      if (container && !container.classList.contains('fade-out')) {
+        container.classList.add('fade-out');
+        setTimeout(() => this.remove(), 800);
+      }
+    }, 5000);
   }
 
   // Cette méthode sera appelée depuis Velo quand le site est prêt
@@ -54,10 +63,11 @@ class CustomPreloader extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
+    console.log(`Attribut changé : ${name} = ${newValue}`);
     if (name === 'status' && newValue === 'done') {
       const container = this.shadowRoot.getElementById('container');
       container.classList.add('fade-out');
-      
+
       // On retire complètement l'élément du DOM après l'animation
       setTimeout(() => this.remove(), 800);
     }
