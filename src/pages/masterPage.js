@@ -1,14 +1,18 @@
 import wixWindowFrontend from 'wix-window-frontend';
 
-$w.onReady(() => {
-    // Si on est en mode aperçu, on cache le loader plus vite pour pas s'embêter
-    const delay = wixWindowFrontend.viewMode === "Preview" ? 200 : 1000;
+$w.onReady(function () {
+    console.log("Velo: masterPage ready");
 
-    // On laisse un petit délai pour le confort visuel
+    // On attend que la page soit réellement chargée aux yeux de l'utilisateur
+    // 1000ms est une valeur sûre pour un portfolio avec des images
     setTimeout(() => {
-        const preloader = $w('#customPreloader'); // Vérifie l'ID de ton élément
-        if (preloader) {
-            preloader.setAttribute('status', 'done');
+        const loader = $w('#customPreloader'); 
+        
+        if (loader) {
+            console.log("Velo: Envoi du signal 'done' au loader");
+            loader.setAttribute('status', 'done');
+        } else {
+            console.error("Velo: Impossible de trouver l'élément #customPreloader");
         }
-    }, delay);
+    }, 1000); 
 });
