@@ -15,6 +15,7 @@ template.innerHTML = `
       align-items: center;
       z-index: 99999;
       transition: opacity 0.8s ease, visibility 0.8s;
+      pointer-events: auto;
     }
     
     .loader-wrapper.fade-out {
@@ -22,6 +23,7 @@ template.innerHTML = `
       visibility: hidden;
       pointer-events: none; /* Sécurité supplémentaire */
       transition: opacity 0.8s ease, visibility 0.8s;
+      pointer-events: none;
     }
 
     /* Exemple de Spinner minimaliste */
@@ -66,18 +68,23 @@ class CustomPreloader extends HTMLElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'status' && newValue === 'done') {
-        const container = this.shadowRoot.getElementById('container');
-        if (container) {
-            container.classList.add('fade-out');
-            
-            // On attend la fin de l'anim (800ms) pour supprimer l'élément du DOM
-            setTimeout(() => {
-                this.style.display = 'none'; // Cache l'hôte
-                this.remove(); // Supprime l'élément
-            }, 800);
-        }
+      const container = this.shadowRoot.getElementById('container');
+      if (container) {
+        container.classList.add('fade-out');
+
+        // On attend la fin de l'anim (800ms) pour supprimer l'élément du DOM
+        setTimeout(() => {
+          this.style.width = '0';
+          this.style.height = '0';
+          this.style.display = 'none'; // Cache l'hôte
+
+          if (this.parentNode) {
+            this.remove(); // Supprime l'élément
+          }
+        }, 800);
+      }
     }
-}
+  }
 }
 
 customElements.define('custom-preloader', CustomPreloader);
