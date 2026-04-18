@@ -80,3 +80,11 @@ class CustomPreloader extends HTMLElement {
     }
 }
 customElements.define('custom-preloader', CustomPreloader);
+
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        // Si la page est chargée depuis le cache (bouton retour), on vire le loader
+        this.checkStatus(); 
+        // Ou force le signal 'done'
+    }
+});

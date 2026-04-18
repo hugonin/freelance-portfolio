@@ -6,13 +6,15 @@ $w.onReady(function () {
     // On attend que la page soit réellement chargée aux yeux de l'utilisateur
     // 1000ms est une valeur sûre pour un portfolio avec des images
     setTimeout(() => {
-        const loader = $w('#customPreloader'); 
-        
+        const loader = $w('#customPreloader');
+
         if (loader) {
-            console.log("Velo: Envoi du signal 'done' au loader");
-            loader.setAttribute('status', 'done');
-        } else {
-            console.error("Velo: Impossible de trouver l'élément #customPreloader");
+            setTimeout(() => {
+                loader.setAttribute('status', 'done');
+                // Optionnel : Animation d'entrée du contenu
+                $w('Document').scrollTo(0, 0); // Force le scroll en haut
+            }, 800);
+
+
         }
-    }, 1000); 
-});
+    });
