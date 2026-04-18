@@ -6,7 +6,7 @@ $w.onReady(() => {
 
     // On laisse un petit délai pour le confort visuel
     setTimeout(() => {
-        const preloader = $w('#customPreloader1'); // Vérifie l'ID de ton élément
+        const preloader = $w('#customPreloader'); // Vérifie l'ID de ton élément
         if (preloader) {
             preloader.setAttribute('status', 'done');
         }
