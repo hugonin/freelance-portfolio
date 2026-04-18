@@ -3,19 +3,25 @@
 const template = document.createElement('template');
 template.innerHTML = `
   <style>
+  :host {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      z-index: 2147483647 !important; /* Le Z-index maximum autorisé en 32-bit */
+      pointer-events: none;
+    }
     .loader-wrapper {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #000000; /* Ta couleur de fond */
+      inset: 0;
+      background-color: #000000;
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 99999;
-      transition: opacity 0.8s ease, visibility 0.8s;
+      z-index: 2147483647;
       pointer-events: auto;
+      transition: opacity 0.8s ease;
     }
     
     .loader-wrapper.fade-out {
