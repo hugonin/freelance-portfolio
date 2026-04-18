@@ -1,4 +1,4 @@
-/* ── Masque le site pendant le chargement ── */
+/* ── Masque le site pendant le chargement 
 body {
   opacity: 0;
   transition: opacity 0.5s ease-out;
@@ -6,3 +6,4 @@ body {
 body.site-ready {
   opacity: 1;
 }
+── */
