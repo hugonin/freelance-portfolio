@@ -45,46 +45,42 @@ template.innerHTML = `
   </div>
 `;
 
+
+// Éviter le flash : On injecte un style "Rideau" immédiatement
+const styleInject = document.createElement('style');
+styleInject.innerHTML = `
+    body { opacity: 0 !important; } 
+    custom-preloader { visibility: visible !important; }
+`;
+document.head.appendChild(styleInject);
+
 class CustomPreloader extends HTMLElement {
-  constructor() {
-    super();
-    this.attachShadow({ mode: 'open' });
-    this.shadowRoot.appendChild(template.content.cloneNode(true));
-
-    // Sécurité : Si après 5 secondes le loader est toujours là, on le dégage.
-    setTimeout(() => {
-      const container = this.shadowRoot.getElementById('container');
-      if (container && !container.classList.contains('fade-out')) {
-        container.classList.add('fade-out');
-        setTimeout(() => this.remove(), 800);
-      }
-    }, 5000);
-  }
-
-  // Cette méthode sera appelée depuis Velo quand le site est prêt
-  static get observedAttributes() {
-    return ['status'];
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (name === 'status' && newValue === 'done') {
-      const container = this.shadowRoot.getElementById('container');
-      if (container) {
-        container.classList.add('fade-out');
-
-        // On attend la fin de l'anim (800ms) pour supprimer l'élément du DOM
-        setTimeout(() => {
-          this.style.width = '0';
-          this.style.height = '0';
-          this.style.display = 'none'; // Cache l'hôte
-
-          if (this.parentNode) {
-            this.remove(); // Supprime l'élément
-          }
-        }, 800);
-      }
+    constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+        this.shadowRoot.appendChild(template.content.cloneNode(true));
     }
-  }
+
+    static get observedAttributes() { return ['status']; }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (name === 'status' && newValue === 'done') {
+            const container = this.shadowRoot.getElementById('container');
+            if (container) {
+                container.classList.add('fade-out');
+                
+                // CRUCIAL : On réaffiche le corps du site JUSTE AVANT la fin du loader
+                setTimeout(() => {
+                    document.body.classList.add('site-ready');
+                    document.body.style.opacity = "1";
+                }, 200);
+
+                setTimeout(() => {
+                    this.remove();
+                }, 800);
+            }
+        }
+    }
 }
 
 customElements.define('custom-preloader', CustomPreloader);
